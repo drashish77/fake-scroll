@@ -6,15 +6,13 @@ import styles from './styles.module.css'
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
-    const panels = useRef([]);
+    const panels = useRef<HTMLDivElement[] | null>(null);
     const panelsContainer = useRef<HTMLDivElement | null>(null);
 
-    const createPanelsRefs = (panel: HTMLElement | null, index: number) => {
-        panels.current[index] = panel;
-    };
+
 
     useEffect(() => {
-        const totalPanels = panels.current.length;
+        const totalPanels = panels.current!.length;
 
         gsap.to(panels.current, {
             xPercent: -100 * (totalPanels - 1),
@@ -25,11 +23,16 @@ export default function App() {
                 scrub: 1,
                 snap: 1 / (totalPanels - 1),
                 // base vertical scrolling on how wide the container is so it feels more natural.
-                end: () => "+=" + panelsContainer.current.offsetWidth
+                end: () => "+=" + panelsContainer.current!.offsetWidth
             }
         });
     }, []);
 
+    const createPanelsRefs = (panel: HTMLElement | any, index: number) => {
+        if (panels.current && panels.current!.length) {
+            panels.current[index] = panel;
+        }
+    };
     return (
         <>
             <div className={`${styles.container}`} ref={panelsContainer}>
@@ -40,11 +43,7 @@ export default function App() {
                     <div>
                         <h1 className={styles.h1}>Horizontal snapping sections (simple)</h1>
                         <p className={styles.p}>
-                            Scroll vertically to scrub the horizontal animation. It also
-                            dynamically snaps to the sections in an organic way based on the
-                            velocity. The snapping occurs based on the natural ending position
-                            after momentum is applied, not a simplistic "wherever it is when
-                            the user stops".
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quis mollitia neque iste saepe omnis molestias exercitationem aliquam, ipsa harum temporibus, quaerat quia recusandae soluta. Reiciendis, illo. Nostrum aliquam placeat sunt quidem recusandae facilis, ut voluptatibus incidunt quas itaque quos tempore magni? Deleniti, provident. Autem libero adipisci accusantium voluptatum fugiat.
                         </p>
                         <div className={styles.scrollDown}>
                             Scroll down<div className={`${styles.arrow}`}></div>
@@ -68,17 +67,17 @@ export default function App() {
                 </section>
             </div>
 
-            <header className={styles.header}>
+            {/* <header className={styles.header}>
                 <a href="https://greensock.com/scrolltrigger">
-                    <img
-                        className="greensock-icon"
+                    <Image
+                        className={styles.}
                         src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/scroll-trigger-logo-light.svg"
                         width="200"
                         height="64"
                         alt="GSAP"
                     />
                 </a>
-            </header>
+            </header> */}
         </>
     );
 }
